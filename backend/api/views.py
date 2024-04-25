@@ -23,7 +23,16 @@ class NoteListCreate(generics.ListCreateAPIView):
         return Note.objects.filter(author=user) # return only the note of the specifique user
 
     def perform_create(self, serializer): ## This function is not neccesry to create the note but with it we can over right the function of creating the note
-        if serializer.is_valid():
-            serializer.save(author=self.request.user)
+        if serializer.is_valid(): #check if all fields in serializer are correct 
+            serializer.save(author=self.request.user) #add the user to the note
         else:
             print(serializer.errors)
+
+# Class to delete a note
+class NoteDelete(generics.DestroyAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated] 
+
+    def get_queryset(self): #Delete notes that you own
+        user = self.request.user
+        return Note.objects.filter(author=user)
