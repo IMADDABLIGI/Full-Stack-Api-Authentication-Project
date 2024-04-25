@@ -7,35 +7,23 @@ from .models import Note
 
 # Create your views here.
 
-class NoteListCreate(generics.ListCreateAPIView):
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        return Note.objects.filter(author=user)
-
-    def perform_create(self, serializer):
-        if serializer.is_valid():
-            serializer.save(author=self.request.user)
-        else:
-            print(serializer.errors)
-
-
-class NoteDelete(generics.DestroyAPIView):
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        return Note.objects.filter(author=user)
-
-
-
-
 # this is a based class view that will allows us to implement creating a new user or like a registration form
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all        # Specifie a list of all the different object that will be looking at when creating a new one to make sure not to create a user that already exsiste
     serializer_class = UserSerializer  # Tell this view what kind of data we need to accept a new user {username and a password}
     permission_classes = [AllowAny]    # Specifie who can actually call to use this view even if not authenticated to create a new user
  
+# Class to create a note
+class NoteListCreate(generics.ListCreateAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Note.objects.filter(author=user) # return only the note of the specifique user
+
+    def perform_create(self, serializer): ## This function is not neccesry to create the note but with it we can over right the function of creating the note
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        else:
+            print(serializer.errors)
