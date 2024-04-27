@@ -18,4 +18,4 @@ api.interceptors.request.use( // This is the argument that is responsible for in
     }
 )
 
-export default api
+export default api //We will be using this api object instead of using axios to send out different request so acces_token will be added automatically for us
