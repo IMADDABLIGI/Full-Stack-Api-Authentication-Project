@@ -4,7 +4,7 @@ import {jwtDecode} from "jwt-decode"
 import api from '../api';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 
-function ProtectedRoute(children) {
+function ProtectedRoute({children}) {
   
     const [isAuthorized, setIsAuthorized] = useState(null);
 
@@ -22,7 +22,7 @@ function ProtectedRoute(children) {
             }
             else
                 setIsAuthorized(false)
-        } 
+        }
         catch (err) {
             console.log(err)
             setIsAuthorized(false)
@@ -33,7 +33,9 @@ function ProtectedRoute(children) {
         const token = localStorage.getItem(ACCESS_TOKEN)
 
         if (!token){
-            setIsAuthorized(false)
+            setIsAuthorized(false);
+            console.log("No Authorisation");
+            console.log(token);
             return;
         }
         const decode = jwtDecode(token) // Check Token expiration

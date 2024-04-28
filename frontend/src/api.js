@@ -2,7 +2,7 @@ import axios from "axios"
 import { ACCESS_TOKEN } from "./constants";
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL
+    baseURL: "http://127.0.0.1:8000"
 })
 
 api.interceptors.request.use( // This is the argument that is responsible for intercepting our process of sending requests to check if we have an access token and add it else return an error
