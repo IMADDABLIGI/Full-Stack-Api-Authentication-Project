@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import api from '../api'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import "../styles/Form.css"
 
 function Form({route, method}) {
@@ -53,6 +53,7 @@ function Form({route, method}) {
                 placeholder='Password...'
             />
             <button className="form-button" type="submit"> {type} </button>
+            {method === "login" && <Link className="form-register" to="/register"> Register </Link>}
         </form>
   )
 }
