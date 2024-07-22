@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import api from '../api';
+import axios from 'axios';
+import { ACCESS_TOKEN } from "../constants";
 
-const PostNote = () => {
+const CreateNote = () => {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
 
@@ -9,20 +10,16 @@ const PostNote = () => {
     e.preventDefault();
 
     try {
-    //   try {
-    //     const resp = await api.post("/api/token/refresh/", { refresh: refreshToken,});
-    //     if (resp.status === 200){ //Successfull
-    //         localStorage.setItem(ACCESS_TOKEN, resp.data.access)
-    //         setIsAuthorized(true)
-    //     }
-    //     else
-    //         setIsAuthorized(false)
-    // }
-    // catch (err) {
-    //     console.log(err)
-    //     setIsAuthorized(false)
-    // }
-      const response = await api.post('/api/notes/', { name, desc });
+      const token = localStorage.getItem(ACCESS_TOKEN);
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.post('http://127.0.0.1:8000/api/notes/', { name, desc }, config);
       console.log('Note created:', response.data);
 
       // Reset the form fields
@@ -62,4 +59,4 @@ const PostNote = () => {
   );
 };
 
-export default PostNote;
+export default CreateNote;
