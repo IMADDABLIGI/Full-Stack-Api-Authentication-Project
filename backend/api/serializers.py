@@ -18,6 +18,6 @@ class NoteSerializer(serializers.ModelSerializer):
         model = Note
         fields = ['id', 'name', 'desc', 'user']
 
-    user = serializers.HiddenField(
-        default=serializers.CurrentUserDefault()
-    )
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
