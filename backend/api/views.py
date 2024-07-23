@@ -27,6 +27,10 @@ class NoteListCreateView(generics.ListCreateAPIView, generics.RetrieveUpdateDest
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         return Response("Note is saved", status=status.HTTP_201_CREATED)
+    
+    # Overrighting the get method qo to return only the user authenticated notes
+    def get_queryset(self):
+        return Note.objects.filter(user=self.request.user)
 
 
 
