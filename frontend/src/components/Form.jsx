@@ -23,6 +23,16 @@ function Form({route, method}) {
                 if (res.status === 200){
                     localStorage.setItem(ACCESS_TOKEN, res.data.access);
                     localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+
+                    const socket = new WebSocket('ws://127.0.0.1:8000/ws/some_path/');
+                    socket.onopen = function() {
+                        console.log('WebSocket connection established');
+                        socket.send(JSON.stringify({ message: 'Hello' }));
+                    };
+                    socket.onmessage = function(event) {
+                        console.log('Message from server:', event.data);
+                    };
+                    
                     navigate("/");
                 }
             }
