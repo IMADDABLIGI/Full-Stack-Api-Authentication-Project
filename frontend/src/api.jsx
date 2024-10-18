@@ -9,7 +9,7 @@ api.interceptors.request.use( // This is the argument that is responsible for in
     (config) => {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (token) {
-            config.headers.Authorization = `Bearer ${token}` // This is how you pass jwt acces_token we create a authorisation header which can be handled by axios. {Bearer 13%a!sd4ad&3afs#}
+            config.headers.Authorization = `Bearer ${token}` // This is how you pass jwt acces_token we create an authorisation header which can be handled by axios. {Bearer 13%a!sd4ad&3afs#}
         }
         return config
     },
