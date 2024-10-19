@@ -9,14 +9,21 @@ function Form({route, method}) {
     const navigate = useNavigate();
     const [username, setUserName] = useState("")
     const [password, setPassword] = useState("")
-    const [isloading, setIsLoading] = useState(false)
     const type = method === 'login' ? 'Login': 'Register'
     
 
     const handleSubmit = async (e) => {
-        setIsLoading(true);
         e.preventDefault();
-
+        const createSocket = () => {
+            const socket = new WebSocket('ws://127.0.0.1:8000/ws/api/');
+                socket.onopen = function() {
+                    console.log('WebSocket connection established');
+                    socket.send(JSON.stringify({ message: 'Hello' }));
+                };
+                socket.onmessage = function(event) {
+                    console.log('Message from server:', event.data);
+                };
+        }
         try {
             const res = await api.post(route, { username, password })
             if (method === "login"){
@@ -24,14 +31,7 @@ function Form({route, method}) {
                     localStorage.setItem(ACCESS_TOKEN, res.data.access);
                     localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
 
-                    const socket = new WebSocket('ws://127.0.0.1:8000/ws/some_path/');
-                    socket.onopen = function() {
-                        console.log('WebSocket connection established');
-                        socket.send(JSON.stringify({ message: 'Hello' }));
-                    };
-                    socket.onmessage = function(event) {
-                        console.log('Message from server:', event.data);
-                    };
+                    // createSocket();
                     
                     navigate("/");
                 }
@@ -40,8 +40,6 @@ function Form({route, method}) {
                 navigate("/login")
         } catch (err) {
             alert(err)
-        } finally {
-            setIsLoading(false)
         }
     }   
 
