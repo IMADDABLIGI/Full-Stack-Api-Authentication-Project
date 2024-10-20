@@ -1,6 +1,6 @@
 import { React } from 'react'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute';
+import {ProtectedRoute} from './components/ProtectedRoute';
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import NotFound from "./pages/NotFound"
@@ -14,10 +14,7 @@ function Logout() {
 const route = createBrowserRouter([
   {
     path: "/",
-    element: 
-      <ProtectedRoute> 
-        <Home />
-      </ProtectedRoute>,
+    element: <ProtectedRoute child={<Home />} />,
     errorElement : <NotFound />
   },
   {
