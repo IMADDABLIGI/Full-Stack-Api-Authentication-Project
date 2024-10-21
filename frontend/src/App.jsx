@@ -2,7 +2,6 @@ import { React } from 'react'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import {ProtectedRoute} from './Authentication/ProtectedRoute';
 import Login from "./Authentication/Login"
-// import Register from "./pages/Register"
 import Register from "./Authentication/Register"
 import Home from "./pages/Home"
 import NotFound from "./pages/NotFound"
@@ -15,12 +14,12 @@ function Logout() {
 const route = createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedRoute child={<Home />} />,
+    element: <ProtectedRoute child={<Home />} case={"Home"} />,
     errorElement : <NotFound />
   },
   {
     path: "/login",
-    element: <ProtectedRoute child={<Login />} />,
+    element: <ProtectedRoute child={<Login />} case={"Login"}/>,
   },
   {
     path: "/register",

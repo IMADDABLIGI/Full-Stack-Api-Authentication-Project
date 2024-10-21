@@ -3,12 +3,13 @@ import { Navigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import api from '../api';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
+import Login from "./Login";
 
 const ProfileContext = createContext();
 
 export default ProfileContext;
 
-export const ProtectedRoute = ({ child }) => {
+export const ProtectedRoute = ({ child, case:caseProp }) => {
     const [user, setUser] = useState(null);
     const [socket, setSocket] = useState(null);
     const [isAuthorized, setIsAuthorized] = useState(null);
@@ -32,6 +33,7 @@ export const ProtectedRoute = ({ child }) => {
         
         const auth = async () => {
             const token = localStorage.getItem(ACCESS_TOKEN);
+            console.log("inside auth()")
             
             if (!token) {
                 setIsAuthorized(false);
@@ -48,11 +50,11 @@ export const ProtectedRoute = ({ child }) => {
                 setIsAuthorized(true);
             }
         };
-        if (user)
+        if (caseProp === 'Home')
             auth()
         else
             setIsAuthorized(true);
-    }, [user]);
+    }, []);
         
     const userInfoData = {
         user,
@@ -66,7 +68,7 @@ export const ProtectedRoute = ({ child }) => {
     }
     return (
         <ProfileContext.Provider value={userInfoData}>
-            {isAuthorized ? child : <Navigate to="/login" />}
+            {isAuthorized ? child : <Login />}
         </ProfileContext.Provider>
     );
 }

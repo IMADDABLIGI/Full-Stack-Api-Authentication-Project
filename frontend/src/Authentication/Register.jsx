@@ -5,6 +5,7 @@ import "../styles/Form.css"
 
 function Register() {
 
+    localStorage.clear()
     const navigate = useNavigate();
     const [username, setUserName] = useState("")
     const [password, setPassword] = useState("")
