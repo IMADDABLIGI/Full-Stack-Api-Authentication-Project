@@ -1,38 +1,42 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react'
 import api from '../api'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants'
 import { Link, useNavigate } from 'react-router-dom'
 import "../styles/Form.css"
+import ProfileContext from './ProtectedRoute'
+
 
 function Form({route, method}) {
+    const {setUser, socket, setSocket} = useContext(ProfileContext);
+
     const navigate = useNavigate();
     const [username, setUserName] = useState("")
     const [password, setPassword] = useState("")
     const type = method === 'login' ? 'Login': 'Register'
     
-
+    const connectSocket = () => {
+        const userSocket = new WebSocket('ws://127.0.0.1:8000/ws/api/');
+        userSocket.onopen = function() {
+            console.log('WebSocket connection established');
+            setSocket(userSocket)
+            userSocket.send(JSON.stringify({ message: 'Hello' }));
+        };
+        userSocket.onmessage = function(event) {
+            console.log('Message from server:', event.data);
+        };
+    }
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const createSocket = () => {
-            const socket = new WebSocket('ws://127.0.0.1:8000/ws/api/');
-                socket.onopen = function() {
-                    console.log('WebSocket connection established');
-                    socket.send(JSON.stringify({ message: 'Hello' }));
-                };
-                socket.onmessage = function(event) {
-                    console.log('Message from server:', event.data);
-                };
-        }
         try {
             const res = await api.post(route, { username, password })
             if (method === "login"){
                 if (res.status === 200){
                     localStorage.setItem(ACCESS_TOKEN, res.data.access);
                     localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-
-                    // createSocket();
-                    
+                    setUser(username);
+                    connectSocket();
                     navigate("/");
                 }
             }

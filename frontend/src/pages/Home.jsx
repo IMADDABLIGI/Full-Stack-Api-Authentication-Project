@@ -1,15 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import ProfileContext from '../components/ProtectedRoute';
 
 function Home() {
 
-  const socket = new WebSocket('ws://127.0.0.1:8000/ws/api/');
-    socket.onopen = function() {
-        console.log('WebSocket connection established');
-        socket.send(JSON.stringify({ message: 'Hello' }));
-    };
-    socket.onmessage = function(event) {
-        console.log('Message from server:', event.data);
-    };
+  const {socket} = useContext(ProfileContext);
 
     const handleSubmit = (e) => {
       e.preventDefault();
