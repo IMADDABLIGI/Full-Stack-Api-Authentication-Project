@@ -1,10 +1,11 @@
 import { React } from 'react'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import {ProtectedRoute} from './components/ProtectedRoute';
+import {ProtectedRoute} from './Authentication/ProtectedRoute';
+import Login from "./Authentication/Login"
+// import Register from "./pages/Register"
+import Register from "./Authentication/Register"
 import Home from "./pages/Home"
-import Login from "./pages/Login"
 import NotFound from "./pages/NotFound"
-import Register from "./pages/Register"
 
 function Logout() {
   localStorage.clear()
@@ -14,16 +15,16 @@ function Logout() {
 const route = createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedRoute child={<Home />} case={"Home"} />,
+    element: <ProtectedRoute child={<Home />} />,
     errorElement : <NotFound />
   },
   {
     path: "/login",
-    element: <ProtectedRoute child={<Login />} case={"Login"} />,
+    element: <ProtectedRoute child={<Login />} />,
   },
   {
     path: "/register",
-    element: <ProtectedRoute child={<Register />} case={"Login"} />,
+    element: <Register />,
   },
   {
     path: "/logout",
@@ -40,6 +41,3 @@ function App() {
 
 export default App;
 
-
-
-//register will bring the ability to register username and password in {"/api/register"} and then u need to login in {"/api/token"} to get yout AccesToken

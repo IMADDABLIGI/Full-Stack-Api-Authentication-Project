@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import ProfileContext from '../components/ProtectedRoute';
+import ProfileContext from '../Authentication/ProtectedRoute';
 
 function Home() {
 
