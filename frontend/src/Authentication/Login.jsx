@@ -15,12 +15,13 @@ function Login() {
     const connectSocket = () => {
         const userSocket = new WebSocket('ws://127.0.0.1:8000/ws/api/');
         userSocket.onopen = function() {
-            console.log('WebSocket connection established');
+            // console.log('WebSocket connection established');
             setSocket(userSocket)
-            userSocket.send(JSON.stringify({ message: 'Hello' }));
+            // userSocket.send(JSON.stringify({ message: 'Hello' }));
         };
         userSocket.onmessage = function(event) {
-            console.log('Message from server:', event.data);
+            const data = JSON.parse(event.data)
+            console.log('Message from server:', data.message);
         };
     }
     

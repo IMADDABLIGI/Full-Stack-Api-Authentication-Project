@@ -13,6 +13,16 @@ export const ProtectedRoute = ({ child }) => {
     const [socket, setSocket] = useState(null);
     const [isAuthorized, setIsAuthorized] = useState(null);
 
+    useEffect(()=>{
+        if (socket){
+            // console.log("Change in socket");
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log('Message from server:', data.message);
+            };
+        }
+    },[socket])
+
     useEffect(() => {
         const refreshToken = async () => {
             const refreshToken = localStorage.getItem(REFRESH_TOKEN);
