@@ -14,12 +14,12 @@ function Logout() {
 const route = createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedRoute child={<Home />} case={"Home"} />,
+    element: <ProtectedRoute child={<Home />} />,
     errorElement : <NotFound />
   },
   {
     path: "/login",
-    element: <ProtectedRoute child={<Login />} case={"Login"}/>,
+    element: <ProtectedRoute child={<Login />}/>,
   },
   {
     path: "/register",

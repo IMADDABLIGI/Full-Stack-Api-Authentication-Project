@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import api from '../api';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
@@ -9,7 +9,7 @@ const ProfileContext = createContext();
 
 export default ProfileContext;
 
-export const ProtectedRoute = ({ child, case:caseProp }) => {
+export const ProtectedRoute = ({ child }) => {
     const [user, setUser] = useState(null);
     const [socket, setSocket] = useState(null);
     const [isAuthorized, setIsAuthorized] = useState(null);
@@ -33,8 +33,6 @@ export const ProtectedRoute = ({ child, case:caseProp }) => {
         
         const auth = async () => {
             const token = localStorage.getItem(ACCESS_TOKEN);
-            console.log("inside auth()")
-            
             if (!token) {
                 setIsAuthorized(false);
                 console.log("No Authorization");
@@ -43,19 +41,25 @@ export const ProtectedRoute = ({ child, case:caseProp }) => {
             const decode = jwtDecode(token);
             const tokenExpiration = decode.exp; // in seconds
             const nowDate = Date.now() / 1000;
-            
-            if (tokenExpiration < nowDate) {
+
+            if (tokenExpiration < nowDate)
                 await refreshToken();
-            } else {
+            else
                 setIsAuthorized(true);
-            }
         };
-        if (caseProp === 'Home')
-            auth()
-        else
-            setIsAuthorized(true);
-    }, []);
-        
+
+        const url = window.location.href;
+        const checkUrlEnd = () => {
+            if (url.endsWith('/'))
+                auth()
+            if(url.endsWith('/login'))
+                setIsAuthorized(true);
+            };
+        if (url)
+            checkUrlEnd();
+
+    }, [window.location.href]);
+
     const userInfoData = {
         user,
         setUser,
@@ -68,7 +72,7 @@ export const ProtectedRoute = ({ child, case:caseProp }) => {
     }
     return (
         <ProfileContext.Provider value={userInfoData}>
-            {isAuthorized ? child : <Login />}
+            {isAuthorized ? child : <Navigate to={"/login"} />}
         </ProfileContext.Provider>
     );
 }

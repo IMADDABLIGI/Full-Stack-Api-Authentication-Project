@@ -4,19 +4,17 @@ import { useNavigate } from 'react-router-dom'
 import "../styles/Form.css"
 
 function Register() {
-
-    localStorage.clear()
     const navigate = useNavigate();
     const [username, setUserName] = useState("")
     const [password, setPassword] = useState("")
+    localStorage.clear()
     
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const res = await api.post('/api/user/register/', { username, password })
-            if (res.status === 201) {
+            if (res.status === 201)
                 navigate("/login")
-            }
         } catch (err) {
             alert(err)
         }
