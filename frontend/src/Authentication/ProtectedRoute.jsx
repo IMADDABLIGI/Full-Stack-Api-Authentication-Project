@@ -1,9 +1,8 @@
 import { createContext, useEffect, useState } from "react";
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import api from '../api';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
-import Login from "./Login";
 
 const ProfileContext = createContext();
 
