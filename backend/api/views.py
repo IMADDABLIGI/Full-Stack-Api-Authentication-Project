@@ -1,10 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserSerializer, NoteSerializer
+from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Note
-
 # Create your views here.
 
 # this is a based class view that will allows us to implement creating a new user or like a registration form
@@ -12,27 +10,44 @@ class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all        # Specifie a list of all the different object that will be looking at when creating a new one to make sure not to create a user that already exsiste
     serializer_class = UserSerializer  # Tell this view what kind of data we need to accept a new user {username and a password}
     permission_classes = [AllowAny]    # Specifie who can actually call to use this view even if not authenticated to create a new user
- 
-# Class to create a note
-class NoteListCreate(generics.ListCreateAPIView):
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Note.objects.filter(author=user) # return only the note of the specifique user
 
-    def perform_create(self, serializer): ## This function is not neccesry to create the note but with it we can over right the function of creating the note
-        if serializer.is_valid(): #check if all fields in serializer are correct 
-            serializer.save(author=self.request.user) #add the user to the note
-        else:
-            print(serializer.errors)
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.response import Response
+from django.utils import timezone
+from datetime import timedelta
 
-# Class to delete a note
-class NoteDelete(generics.DestroyAPIView):
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated] 
 
-    def get_queryset(self): #Delete notes that you own
-        user = self.request.user
-        return Note.objects.filter(author=user)
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = TokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        # Call the parent method to get the token data
+        response = super().post(request, *args, **kwargs)
+        
+        # Extract tokens from response data
+        access_token = response.data['access']
+        refresh_token = response.data['refresh']
+        
+        # Set cookies for access and refresh tokens
+        response.set_cookie(
+            key='access_token',
+            value=access_token,
+            httponly=True,  # Prevents JavaScript access
+            secure=False,    # Use True in production (HTTPS)
+            expires=timezone.now() + timedelta(days=7)  # Set expiration as needed
+        )
+        print("--------------------")
+        # print("ACCESS:", access_token)
+        print("Cookie has been created")
+        
+        response.set_cookie(
+            key='refresh_token',
+            value=refresh_token,
+            httponly=True,
+            secure=False,  
+            expires=timezone.now() + timedelta(days=7)  # Set expiration as needed
+        )
+
+        return response
