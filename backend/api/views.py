@@ -3,6 +3,11 @@ from django.contrib.auth.models import User
 from rest_framework import generics
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.response import Response
+from django.utils import timezone
+from datetime import timedelta
 # Create your views here.
 
 # this is a based class view that will allows us to implement creating a new user or like a registration form
@@ -12,11 +17,6 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]    # Specifie who can actually call to use this view even if not authenticated to create a new user
 
 
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework.response import Response
-from django.utils import timezone
-from datetime import timedelta
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
