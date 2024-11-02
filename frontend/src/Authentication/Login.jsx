@@ -37,7 +37,7 @@ function Login() {
                   username: username,
                   password: password,
                 }),
-                // credentials: 'include',
+                credentials: 'include',
             });
 
             // const res = await api.post('/api/token/', { username, password })
@@ -54,41 +54,6 @@ function Login() {
             alert(err)
         }
     }
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         const res = await fetch("http://localhost:8000/api/token/", {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             body: JSON.stringify({
-    //                 username: username,
-    //                 password: password,
-    //             }),
-    //             credentials: "include",
-    //         });
-    
-    //         // Check if the response is OK (status in the range 200-299)
-    //         if (!res.ok) {
-    //             throw new Error('Network response was not ok');
-    //         }
-    
-    //         // Parse the JSON response
-    //         const data = await res.json();
-    
-    //         if (data.access) {
-    //             localStorage.setItem(ACCESS_TOKEN, data.access);
-    //             console.log(data.access);
-    //             localStorage.setItem(REFRESH_TOKEN, data.refresh);
-    //             setUser(username);
-    //             createSocket();
-    //             navigate("/");
-    //         }
-    //     } catch (err) {
-    //         alert(err);
-    //     }
-    // };
 
     return (
         <form onSubmit={handleSubmit} className='form-container'>
